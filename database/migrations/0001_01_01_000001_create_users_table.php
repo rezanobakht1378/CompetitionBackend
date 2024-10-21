@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone',13)->unique();
             $table->boolean('can_get_alert')->default(true);
-            $table->text('bio');
+            $table->text('bio')->nullable();
             $table->foreignIdFor(Team::class)->nullable();
             $table->boolean('is_team_admin')->default(false);
             $table->timestamp('email_verified_at')->nullable();
