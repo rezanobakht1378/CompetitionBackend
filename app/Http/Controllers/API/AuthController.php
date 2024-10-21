@@ -20,8 +20,7 @@ class AuthController extends BaseController
     public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'lastname' => 'required',
+            'fullname' => 'required',
             'email' => 'required|email',
             'phone' => 'required|min:9|max:13',
             'password' => 'required',
@@ -41,8 +40,8 @@ class AuthController extends BaseController
             return $this->sendError('Register Failed Error.', "phone number or email already registered");
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] =  $user->createToken($user->name)->plainTextToken;
-        $success['name'] =  $user->name;
+        $success['token'] =  $user->createToken($user->fullname)->plainTextToken;
+        $success['name'] =  $user->fullname;
         return $this->sendResponse($success, 'User register successfully.');
     }
 
@@ -56,8 +55,8 @@ class AuthController extends BaseController
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             $user = Auth::user();
             $user->tokens()->delete();
-            $success['token'] =  $user->createToken($user->name)->plainTextToken;
-            $success['name'] =  $user->name;
+            $success['token'] =  $user->createToken($user->fullname)->plainTextToken;
+            $success['name'] =  $user->fullname;
 
             return $this->sendResponse($success, 'User login successfully.');
         }
