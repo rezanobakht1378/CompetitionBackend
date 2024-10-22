@@ -74,8 +74,8 @@ return [
     'terms_of_service' => '',
 
     'contact' => [
-        // 'name' => 'YOUR_NAME',
-        // 'email' => 'YOUR_EMAIL',
+        'name' => 'Reza Nobakht',
+        'email' => 'rezanobakht1378@gmail.com',
         // 'url' => 'YOUR_URL'
     ],
 
@@ -207,11 +207,12 @@ return [
      */
 
     'security' => [
-        'BearerAuth' => [
+        'sanctum' => [
             'type' => 'http',
             'scheme' => 'bearer',
-            'bearerFormat' => 'JWT',
+            'bearerFormat' => 'sanctum',
         ],
+
     ],
 
     /*
@@ -283,7 +284,7 @@ return [
                  * Specify headers to be added to the example requests
                  */
                 'headers' => [
-                    'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJod',
+                    'Authorization' => 'Bearer 5|6HyucfHT3Tx0Q6whDb4sBZQzIKLChDsngjjeNzxfc8cc9f90',
                     // 'Api-Version' => 'v2',
                 ],
 

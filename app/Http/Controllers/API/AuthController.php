@@ -2,22 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-/**
- * @OA\Info(
- *     title="API Documentation",
- *     version="1.0.0",
- *     description="This is the API documentation for your application.",
- *     @OA\Contact(
- *         name="Your Name",
- *         email="your-email@example.com"
- *     ),
- *     @OA\License(
- *         name="MIT",
- *         url="https://opensource.org/licenses/MIT"
- *     )
- * )
- */
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
@@ -47,11 +31,6 @@ class AuthController extends BaseController
      *                     description="Full name of the user"
      *                 ),
      *                 @OA\Property(
-     *                     property="email",
-     *                     type="string",
-     *                     description="Email address of the user"
-     *                 ),
-     *                 @OA\Property(
      *                     property="phone",
      *                     type="string",
      *                     description="Phone number of the user (9 to 13 digits)"
@@ -77,7 +56,7 @@ class AuthController extends BaseController
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Validation error or email/phone already registered"
+     *         description="Validation error or phone already registered"
      *     )
      * )
      */
@@ -85,7 +64,7 @@ class AuthController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'fullname' => 'required',
-            'email' => 'required|email',
+            // 'email' => 'required|email',
             'phone' => 'required|min:9|max:13',
             'password' => 'required',
             'c_password' => 'required|same:password',
@@ -96,13 +75,14 @@ class AuthController extends BaseController
         }
 
         $input = $request->all();
-        $input["name"] = Str::lower($input["fullname"]); // Use "fullname" instead of "name"
-        $em = explode('@', $input["email"]);
-        $em[0] = str_replace('.', '', $em[0]);
-        $input["email"] = $em[0] . '@' . $em[1];
-        $user_existance = User::where('email', $input["email"])->orWhere('phone', $input["phone"])->count();
+        $input["name"] = Str::lower($input["fullname"]);
+        // $em = explode('@', $input["email"]);
+        // $em[0] = str_replace('.', '', $em[0]);
+        // $input["email"] = $em[0] . '@' . $em[1];
+        // $user_existance = User::where('email', $input["email"])->orWhere('phone', $input["phone"])->count();
+        $user_existance = User::Where('phone', $input["phone"])->count();
         if ($user_existance > 0) {
-            return $this->sendError('Register Failed Error.', "Phone number or email already registered");
+            return $this->sendError('Register Failed Error.', "Phone number Already registered");
         }
 
         $input['password'] = bcrypt($input['password']);
@@ -127,9 +107,9 @@ class AuthController extends BaseController
      *             @OA\Schema(
      *                 type="object",
      *                 @OA\Property(
-     *                     property="email",
+     *                     property="phone",
      *                     type="string",
-     *                     description="Email address of the user"
+     *                     description="phone of the user"
      *                 ),
      *                 @OA\Property(
      *                     property="password",
@@ -153,7 +133,7 @@ class AuthController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (Auth::attempt(['phone' => $request->phone, 'password' => $request->password])) {
             $user = Auth::user();
             $user->tokens()->delete();
             $success['token'] = $user->createToken($user->fullname)->plainTextToken;
@@ -182,9 +162,9 @@ class AuthController extends BaseController
      *     )
      * )
      */
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         $request->user()->tokens()->delete();
-        return response()->json(['message' => 'Logged out successfully'], 200);
+        return $this->sendResponse(true, 'Logged out successfully');
     }
 }

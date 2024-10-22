@@ -4,8 +4,8 @@
         "title": "API Documentation",
         "description": "This is the API documentation for your application.",
         "contact": {
-            "name": "Your Name",
-            "email": "your-email@example.com"
+            "name": "Reza Nobakht",
+            "email": "rezanobakht1378@gmail.com"
         },
         "license": {
             "name": "MIT",
@@ -39,10 +39,6 @@
                                         "description": "Full name of the user",
                                         "type": "string"
                                     },
-                                    "email": {
-                                        "description": "Email address of the user",
-                                        "type": "string"
-                                    },
                                     "phone": {
                                         "description": "Phone number of the user (9 to 13 digits)",
                                         "type": "string"
@@ -66,7 +62,7 @@
                         "description": "User registered successfully"
                     },
                     "400": {
-                        "description": "Validation error or email/phone already registered"
+                        "description": "Validation error or phone already registered"
                     }
                 }
             }
@@ -89,8 +85,8 @@
                                     "password"
                                 ],
                                 "properties": {
-                                    "email": {
-                                        "description": "Email address of the user",
+                                    "phone": {
+                                        "description": "phone of the user",
                                         "type": "string"
                                     },
                                     "password": {
@@ -130,12 +126,121 @@
                     }
                 }
             }
+        },
+        "/competition/Create": {
+            "post": {
+                "tags": [
+                    "Competitions"
+                ],
+                "summary": "Create a new competition",
+                "description": "This endpoint creates a new competition.",
+                "operationId": "5771d27a819026ccc0ea0cec9de2ac52",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Competition Name"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Competition created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Competition"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Competition created successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Validation Error."
+                                        },
+                                        "validation_errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Competition": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Competition Name"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00Z"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "5|6HyucfHT3Tx0Q6whDb4sBZQzIKLChDsngjjeNzxfc8cc9f90",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
         }
     },
     "tags": [
         {
             "name": "Users",
             "description": "Users"
+        },
+        {
+            "name": "Competitions",
+            "description": "Competitions"
         }
     ]
 }
